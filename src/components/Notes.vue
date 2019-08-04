@@ -46,17 +46,19 @@
           <input type="radio" @click="sortByTitle" id="bytitle" autocomplete="off"> By Title
         </label>
       </div>
-      <div class="note" v-for="(note, index) in notes" :key="note.index">
-        <div class="card col-sm-4">
-          <div class="card-block">
-            <div class="btn-group float-right" role="group">
-              <button class="copy" @click="removeNote(index)">&#10006;</button>
-              <button class="close" @click="copyNote(index)">&#9998;</button>
+      <div class="row">
+        <div class="note col-md-4" v-for="(note, index) in notes" :key="note.index">
+          <div class="card">
+            <div class="card-body">
+              <div class="btn-group float-right" role="group">
+                <button class="copy" @click="copyNote(index)">&#10066;</button>
+                <button class="close" @click="removeNote(index)">&#10006;</button>
+              </div>
+              <h4 class="card-title">{{ note.title }}</h4>
+              <h6 class="card-subtitle mb-2 text-muted">{{note.date.split(',')[0]}}</h6>
+              <p class="card-text">{{note.text}}</p>
+              <p class="card-email">Email: <a href="#">{{note.email}}</a></p>
             </div>
-            <h4 class="card-title">{{ note.title }}</h4>
-            <h6 class="card-subtitle mb-2 text-muted">{{note.date.split(',')[0]}}</h6>
-            <p class="card-text">{{note.text}}</p>
-            <p class="card-text">{{note.email}}</p>
           </div>
         </div>
       </div>
@@ -153,7 +155,7 @@ export default {
     checkForm() {
       let currentAlert = "";
       if (this.note.title !== "" && !this.isTitleValid) {
-        currentAlert += `<li>Note Title should be at elast 3 letters long</li>
+        currentAlert += `<li>Note Title should be at least 3 letters long</li>
                         <li>Note Title should start with a capital letter</li>`;
       }
       if (this.note.text !== "" && !this.isTextValid) {
@@ -173,58 +175,61 @@ export default {
       }
     },
     sortByTitle() {
-      this.isSortedByDate = false
-      this.isSortedByTitle = true
+      this.isSortedByDate = false;
+      this.isSortedByTitle = true;
       this.notes.sort(function(firstEl, secondEl) {
-        if(firstEl.title < secondEl.title) { 
-          return -1; 
+        if (firstEl.title < secondEl.title) {
+          return -1;
         }
-        if(firstEl.title > secondEl.title) { 
-          return 1; 
-        }
-        return 0;
-      })
-    },
-    sortByDate() {
-      this.isSortedByDate = true
-      this.isSortedByTitle = false
-      this.notes.sort(function(firstEl, secondEl) {
-        if(firstEl.date < secondEl.date) {
+        if (firstEl.title > secondEl.title) {
           return 1;
         }
-        if(firstEl.date > secondEl.date) { 
-          return -1; 
+        return 0;
+      });
+    },
+    sortByDate() {
+      this.isSortedByDate = true;
+      this.isSortedByTitle = false;
+      this.notes.sort(function(firstEl, secondEl) {
+        if (firstEl.date < secondEl.date) {
+          return 1;
+        }
+        if (firstEl.date > secondEl.date) {
+          return -1;
         }
         return 0;
-      })
+      });
     },
     copyNote(index) {
-      let { title, text, email } = this.notes[index]
+      let { title, text, email } = this.notes[index];
       this.notes.push({
         text,
         title,
         date: new Date(Date.now()).toLocaleString(),
         email
       });
-      console.log(this.notes)
+      console.log(this.notes);
     }
   },
   created() {
     this.notes.sort(function(firstEl, secondEl) {
-        if(firstEl.date < secondEl.date) {
-          return 1;
-        }
-        if(firstEl.date > secondEl.date) { 
-          return -1; 
-        }
-        return 0;
-      })
+      if (firstEl.date < secondEl.date) {
+        return 1;
+      }
+      if (firstEl.date > secondEl.date) {
+        return -1;
+      }
+      return 0;
+    });
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+p {
+  margin: 0;
+}
 h3 {
   margin: 40px 0 0;
 }
@@ -232,21 +237,56 @@ h3 {
   text-align: left;
 }
 a {
-  color: #42b983;
+  color: #1f88a7;
 }
 .form {
-    text-align: left;
+  text-align: left;
 }
 
+
+.copy {
+  background-color: #42b983;
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  margin: 2px;
+  padding: 0;
+  border: none;
+  &:hover {
+    background-color: #34a170;
+  }
+}
+
+.close {
+  background-color: #f44336;
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  margin: 2px;
+}
+
+
 .card {
-    text-align: left;
-    border: 1px solid #2c3e50;
-    border-radius: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
+  text-align: left;
+  border: 1px solid #b6b6b6;
+  background: #fffffe;
+  border-radius: 4px;
+  padding-left: 8px;
+  padding-right: 8px;
+  .card-subtitle {
+    font-size: 0.9em;
+  }
+  .card-email {
+    font-size: 0.95em;
+    margin-top: 5px;
+  }
 }
 
 .note {
-    padding: 5px;
+  padding: 5px;
+}
+
+.btn-group-toggle {
+  margin-bottom: 15px;
 }
 </style>

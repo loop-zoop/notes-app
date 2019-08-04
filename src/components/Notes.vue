@@ -199,7 +199,14 @@ export default {
       })
     },
     copyNote(index) {
-      this.notes.push(this.notes[index])
+      let { title, text, email } = this.notes[index]
+      this.notes.push({
+        text,
+        title,
+        date: new Date(Date.now()).toLocaleString(),
+        email
+      });
+      console.log(this.notes)
     }
   },
   created() {
